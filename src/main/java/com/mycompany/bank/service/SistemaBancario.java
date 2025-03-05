@@ -50,7 +50,7 @@ public class SistemaBancario {
     public void adicionarConta(Conta c) {
         this.contas.add(c);
     }
-
+    
     public Conta buscarContaPorNumero(String numero) {
         for (Conta c : contas) {
             if (c.getNumero().equals(numero)) {
@@ -58,6 +58,17 @@ public class SistemaBancario {
             }
         }
         return null;
+    }
+
+    public List<Conta> buscarContaPorUsuario(int userId) {
+        List<Conta> contasUsuario = new ArrayList<>();
+        
+        for (Conta c : contas) {
+            if (c.getUserId() == userId) {
+                contasUsuario.add(c);
+            }
+        }
+        return contasUsuario;
     }
 
     // Métodos para gerenciar investimentos

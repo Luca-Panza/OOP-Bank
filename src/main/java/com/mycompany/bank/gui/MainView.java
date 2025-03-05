@@ -1,21 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.bank.gui;
 
 import com.mycompany.bank.service.SistemaBancario;
 import com.mycompany.bank.model.Usuario;
+import com.mycompany.bank.gui.ActionsView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Exemplo mínimo de uma tela de login em Swing.
- * Em um projeto real, você pode ter várias telas diferentes para cada perfil.
- */
 public class MainView extends JFrame {
 
     private JTextField cpfField;
@@ -33,11 +26,11 @@ public class MainView extends JFrame {
         setLayout(new FlowLayout());
 
         add(new JLabel("CPF:"));
-        cpfField = new JTextField(15);
+        cpfField = new JTextField(20);
         add(cpfField);
 
         add(new JLabel("Senha:"));
-        senhaField = new JPasswordField(15);
+        senhaField = new JPasswordField(19);
         add(senhaField);
 
         loginButton = new JButton("Login");
@@ -50,7 +43,10 @@ public class MainView extends JFrame {
                 Usuario user = sistema.login(cpf, senha);
                 if (user != null) {
                     JOptionPane.showMessageDialog(null, "Bem-vindo, " + user.getNome());
-                    // Aqui você pode abrir outra tela (ex. TelaCliente, TelaCaixa, TelaGerente, etc.)
+                    setVisible(false);
+                    
+                    ActionsView actionsView = new ActionsView(sistema, user);
+                    actionsView.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "CPF ou senha inválidos.");
                 }

@@ -1,5 +1,6 @@
 package com.mycompany.bank.model;
 
+import com.mycompany.bank.service.SistemaBancario;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,8 @@ public class Gerente extends Usuario {
 
     private List<Investimento> opcoesInvestimento;
 
-    public Gerente(String nome, String cpf, String senha) {
-        super(nome, cpf, senha);
+    public Gerente(String nome, String cpf, String senha, SistemaBancario sistema) {
+        super(nome, cpf, senha, sistema);
         this.opcoesInvestimento = new ArrayList<>();
     }
 

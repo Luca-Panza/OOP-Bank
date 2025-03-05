@@ -1,14 +1,15 @@
 package com.mycompany.bank.model;
 
 import com.mycompany.bank.exceptions.SaldoInsuficienteException;
+import com.mycompany.bank.service.SistemaBancario;
 
 /**
  * Representa o Caixa do banco.
  */
 public class Caixa extends Usuario {
 
-    public Caixa(String nome, String cpf, String senha) {
-        super(nome, cpf, senha);
+    public Caixa(String nome, String cpf, String senha, SistemaBancario sistema) {
+        super(nome, cpf, senha, sistema);
     }
 
     public void processarDeposito(Conta conta, double valor) {

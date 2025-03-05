@@ -1,5 +1,8 @@
 package com.mycompany.bank.model;
 
+import com.mycompany.bank.service.SistemaBancario;
+import java.util.List;
+
 /**
  * Classe abstrata para representar um usuário do sistema bancário.
  */
@@ -11,12 +14,14 @@ public abstract class Usuario implements Autenticavel {
     private String nome;
     private String cpf;
     private String senha;
+    protected SistemaBancario sistema;
 
-    public Usuario(String nome, String cpf, String senha) {
+    public Usuario(String nome, String cpf, String senha, SistemaBancario sistema) {
         this.id = ++contadorId;
         this.nome = nome;
         this.cpf = cpf;
         this.senha = senha;
+        this.sistema = sistema;
     }
 
     // Implementação da interface Autenticavel
@@ -52,5 +57,14 @@ public abstract class Usuario implements Autenticavel {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+    
+    public List<Conta> getContas() {
+        return sistema.buscarContaPorUsuario(getId());
+    }
+    
+    @Override
+    public String toString() {
+        return this.nome;
     }
 }
