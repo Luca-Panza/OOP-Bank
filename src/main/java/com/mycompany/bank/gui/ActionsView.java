@@ -2,6 +2,8 @@ package com.mycompany.bank.gui;
 
 import com.mycompany.bank.gui.ClienteTransf;
 import com.mycompany.bank.gui.ClienteBalance;
+import com.mycompany.bank.gui.SaqueCaixa;
+import com.mycompany.bank.gui.CaixaTransf;
 
 import com.mycompany.bank.service.SistemaBancario;
 import com.mycompany.bank.model.Usuario;
@@ -14,13 +16,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ActionsView extends JFrame {
-
-    private SistemaBancario sistema;
-    private Usuario usuario;
-
     public ActionsView(SistemaBancario sistema, Usuario usuario) {
         super("Sistema Bancário - Ações");
-        this.sistema = sistema;
         
         ActionsView instancia = this;
 
@@ -67,11 +64,43 @@ public class ActionsView extends JFrame {
         } else if (usuario instanceof Caixa) {
             setSize(300, 150);
             JButton btnTransferencia = new JButton("Atendimento de Saque");
-            JButton btnSaldoProssDep = new JButton("Processamento de Depósitos");
+            
+            btnTransferencia.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SaqueCaixa saqueCaixa = new SaqueCaixa(instancia, (Caixa) usuario);
+                    
+                    saqueCaixa.setVisible(true);
+                    instancia.setVisible(false);
+                }
+            });
+            
+            JButton btnProssDep = new JButton("Processamento de Depósitos");
+            
+            btnProssDep.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ProssDeposito prossDeposito = new ProssDeposito(instancia, (Caixa) usuario);
+                    
+                    prossDeposito.setVisible(true);
+                    instancia.setVisible(false);
+                }
+            });
+            
             JButton btnTransf = new JButton("Transferência");
+            
+            btnTransf.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CaixaTransf caixaTransf = new CaixaTransf(instancia, (Caixa) usuario);
+                    
+                    caixaTransf.setVisible(true);
+                    instancia.setVisible(false);
+                }
+            });
 
             add(btnTransferencia);
-            add(btnSaldoProssDep);
+            add(btnProssDep);
             add(btnTransf);
 
         } else if (usuario instanceof Gerente) {

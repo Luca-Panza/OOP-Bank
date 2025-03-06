@@ -5,6 +5,7 @@ import com.mycompany.bank.service.SistemaBancario;
 import com.mycompany.bank.model.Conta;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  * Representa o Cliente do banco.
@@ -60,5 +61,26 @@ public class Cliente extends Usuario {
         origem.transferir(destino, valor);
         
         return true;
+    }
+    
+    public boolean sacar(String contaOrigem, double valor) {
+        Conta origem = null;
+
+        final List<Conta> contasUsuario = getContas();
+        
+        for (Conta c : contasUsuario) {
+            if (c.getNumero().equals(contaOrigem)) {
+                origem = c;
+                break;
+            }
+        }
+        
+        try {
+            origem.sacar(valor);
+            return true;
+        } catch (SaldoInsuficienteException error) {
+            JOptionPane.showMessageDialog(null, "Saldo da conta é insuficiente!");
+            return false;
+        }
     }
 }

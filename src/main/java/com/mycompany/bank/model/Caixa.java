@@ -26,4 +26,12 @@ public class Caixa extends Usuario {
         origem.transferir(destino, valor);
         System.out.println("Transferência de R$" + valor + " realizada com sucesso.");
     }
+    
+    public Cliente getClienteByAccount(String conta) {
+        return sistema.getClienteByAccount(conta);
+    }
+    
+    public Conta getContaByNumero(String conta) {
+        return sistema.buscarContaPorNumero(conta);
+    }
 }

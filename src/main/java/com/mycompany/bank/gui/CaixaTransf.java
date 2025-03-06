@@ -1,5 +1,6 @@
 package com.mycompany.bank.gui;
 
+import com.mycompany.bank.model.Caixa;
 import com.mycompany.bank.model.Cliente;
 import com.mycompany.bank.exceptions.SaldoInsuficienteException;
 
@@ -7,14 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ClienteTransf extends JFrame {
+public class CaixaTransf extends JFrame {
     private JTextField originAccountField;
     private JTextField destAccountField;
     private JTextField valueField;
     private JPasswordField passwordField;
     private JButton confirmButton;
 
-    public ClienteTransf(ActionsView actionsView, Cliente cliente) {
+    public CaixaTransf(ActionsView actionsView, Caixa caixa) {
         super("Sistema Bancário - Transferência");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,14 +73,14 @@ public class ClienteTransf extends JFrame {
 
                 double numberValue = Double.parseDouble(value);
 
-                boolean pertecenteConta = cliente.pertenceConta(originAccount);
+                Cliente clienteConta = caixa.getClienteByAccount(originAccount);
 
-                if (!pertecenteConta) {
-                    JOptionPane.showMessageDialog(null, "Conta inválida ou não pertence ao usuário");
+                if (clienteConta == null) {
+                    JOptionPane.showMessageDialog(null, "Conta de origem inválida");
                     return;
                 }
 
-                boolean verificaSenha = cliente.autenticar(password);
+                boolean verificaSenha = clienteConta.autenticar(password);
 
                 if (!verificaSenha) {
                     JOptionPane.showMessageDialog(null, "Senha inválida");
@@ -87,7 +88,7 @@ public class ClienteTransf extends JFrame {
                 }
 
                 try {
-                    boolean destAccountFound = cliente.transferir(originAccount, destAccount, numberValue);
+                    boolean destAccountFound = clienteConta.transferir(originAccount, destAccount, numberValue);
                     
                     if (!destAccountFound) {
                         JOptionPane.showMessageDialog(null, "Conta de destino inválida !");

@@ -1,6 +1,7 @@
 package com.mycompany.bank.service;
 
 import com.mycompany.bank.model.Usuario;
+import com.mycompany.bank.model.Cliente;
 import com.mycompany.bank.model.Conta;
 import com.mycompany.bank.model.Investimento;
 import java.util.ArrayList;
@@ -31,6 +32,16 @@ public class SistemaBancario {
                 return u;
             }
         }
+        return null;
+    }
+    
+    public Usuario buscarUsuarioPorId(int id) {
+        for (Usuario u : usuarios) {
+            if (u.getId() == id) {
+                return u;
+            }
+        }
+        
         return null;
     }
 
@@ -78,6 +89,16 @@ public class SistemaBancario {
 
     public List<Investimento> getInvestimentos() {
         return investimentos;
+    }
+    
+    public Cliente getClienteByAccount(String conta) {
+        Conta contaEncontrada = buscarContaPorNumero(conta);
+        
+        if (contaEncontrada != null) {
+            return (Cliente) buscarUsuarioPorId(contaEncontrada.getUserId());
+        }
+        
+        return null;
     }
 
     // Exemplos de métodos de persistência (incompletos):

@@ -15,11 +15,8 @@ public class MainView extends JFrame {
     private JPasswordField senhaField;
     private JButton loginButton;
 
-    private SistemaBancario sistema;
-
     public MainView(SistemaBancario sistema) {
         super("Sistema Bancário - Login");
-        this.sistema = sistema;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
@@ -52,6 +49,7 @@ public class MainView extends JFrame {
                 }
             }
         });
+        
         add(loginButton);
 
         setLocationRelativeTo(null);

@@ -1,34 +1,29 @@
 package com.mycompany.bank.gui;
 
-import com.mycompany.bank.model.Cliente;
 import com.mycompany.bank.exceptions.SaldoInsuficienteException;
-
+import com.mycompany.bank.model.Cliente;
+import com.mycompany.bank.model.Caixa;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ClienteTransf extends JFrame {
-    private JTextField originAccountField;
-    private JTextField destAccountField;
+public class SaqueCaixa extends JFrame {
     private JTextField valueField;
     private JPasswordField passwordField;
     private JButton confirmButton;
-
-    public ClienteTransf(ActionsView actionsView, Cliente cliente) {
-        super("Sistema Bancário - Transferência");
-
+    private JTextField originAccountField;
+    
+    public SaqueCaixa(ActionsView actionsView, Caixa caixa) {
+        super("Sistema Bancário - Saque");
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(280, 260);
         setLayout(new FlowLayout());
-
+        
         add(new JLabel("Conta de origem:"));
         originAccountField = new JTextField(20);
         add(originAccountField);
-
-        add(new JLabel("Conta de destino:"));
-        destAccountField = new JTextField(20);
-        add(destAccountField);
-
+        
         add(new JLabel("Valor:"));
         valueField = new JTextField(20);
 
@@ -44,38 +39,32 @@ public class ClienteTransf extends JFrame {
                 }
             }
         });
-
+        
         add(valueField);
 
         add(new JLabel("Senha:"));
         passwordField = new JPasswordField(20);
         add(passwordField);
-
+        
         confirmButton = new JButton("Confirmar");
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String originAccount = originAccountField.getText();
-                String destAccount = destAccountField.getText();
                 String password = new String(passwordField.getPassword());
                 String value = valueField.getText();
 
-                if (originAccount.isBlank() || destAccount.isBlank() || password.isBlank() || value.isBlank()) {
+                if (originAccount.isBlank() || password.isBlank() || value.isBlank()) {
                     JOptionPane.showMessageDialog(null, "Por favor preencha todos os campos.");
                     return;
                 }
                 
-                if (originAccount.equals(destAccount)) {
-                    JOptionPane.showMessageDialog(null, "Conta de origem e destino iguais.");
-                    return;
-                }
-
                 double numberValue = Double.parseDouble(value);
-
-                boolean pertecenteConta = cliente.pertenceConta(originAccount);
-
-                if (!pertecenteConta) {
-                    JOptionPane.showMessageDialog(null, "Conta inválida ou não pertence ao usuário");
+                
+                Cliente cliente = caixa.getClienteByAccount(originAccount);
+                
+                if (cliente == null) {
+                    JOptionPane.showMessageDialog(null, "Conta inválida");
                     return;
                 }
 
@@ -85,20 +74,13 @@ public class ClienteTransf extends JFrame {
                     JOptionPane.showMessageDialog(null, "Senha inválida");
                     return;
                 }
-
-                try {
-                    boolean destAccountFound = cliente.transferir(originAccount, destAccount, numberValue);
-                    
-                    if (!destAccountFound) {
-                        JOptionPane.showMessageDialog(null, "Conta de destino inválida !");
-                        return;
-                    }
-                    
-                    JOptionPane.showMessageDialog(null, "Transferência realizada !");
+                
+                boolean success = cliente.sacar(originAccount, numberValue);
+                
+                if (success) {
+                    JOptionPane.showMessageDialog(null, "Saque autorizado !");
                     actionsView.setVisible(true);
                     setVisible(false);
-                } catch (SaldoInsuficienteException error) {
-                    JOptionPane.showMessageDialog(null, "Saldo da conta é insuficiente!");
                 }
             }
         });
