@@ -23,11 +23,11 @@ public class SolicitacaoCreditoTest {
         
         // Cria um cliente para testes
         cliente = new Cliente("Roberto Lima", "456.789.123-00", "senha789", sistema);
-        sistema.cadastrarUsuario(cliente);
+        sistema.adicionarUsuario(cliente);
         
         // Cria um gerente para analisar solicitações
         gerente = new Gerente("Mariana Costa", "321.654.987-00", "senhager", sistema);
-        sistema.cadastrarUsuario(gerente);
+        sistema.adicionarUsuario(gerente);
         
         // Cria uma solicitação de crédito
         solicitacao = new SolicitacaoCred(cliente.getId(), 5000.0, "Reforma residencial");

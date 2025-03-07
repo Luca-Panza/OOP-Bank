@@ -27,8 +27,8 @@ public class OperacoesFinanceirasTest {
         cliente2 = new Cliente("Carlos Santos", "987.654.321-00", "senha456", sistema);
         
         // Adiciona clientes ao sistema
-        sistema.cadastrarUsuario(cliente1);
-        sistema.cadastrarUsuario(cliente2);
+        sistema.adicionarUsuario(cliente1);
+        sistema.adicionarUsuario(cliente2);
         
         // Cria contas para os clientes
         conta1 = new Conta("1001", 1000.0, cliente1.getId());

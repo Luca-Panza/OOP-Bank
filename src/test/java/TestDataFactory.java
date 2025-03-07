@@ -31,12 +31,12 @@ public class TestDataFactory {
         Caixa caixa1 = new Caixa("João Pereira", "666.777.888-99", "caixa123", sistema);
         
         // Cadastra usuários no sistema
-        sistema.cadastrarUsuario(cliente1);
-        sistema.cadastrarUsuario(cliente2);
-        sistema.cadastrarUsuario(cliente3);
-        sistema.cadastrarUsuario(gerente1);
-        sistema.cadastrarUsuario(gerente2);
-        sistema.cadastrarUsuario(caixa1);
+        sistema.adicionarUsuario(cliente1);
+        sistema.adicionarUsuario(cliente2);
+        sistema.adicionarUsuario(cliente3);
+        sistema.adicionarUsuario(gerente1);
+        sistema.adicionarUsuario(gerente2);
+        sistema.adicionarUsuario(caixa1);
         
         // Cria e adiciona contas para os clientes
         Conta conta1 = new Conta("C001", 2000.0, cliente1.getId());

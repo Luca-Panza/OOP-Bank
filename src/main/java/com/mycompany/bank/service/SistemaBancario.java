@@ -232,4 +232,12 @@ public class SistemaBancario {
         saveToFileXML(INVESTIMENTOS_FILE.replace(".json", ".xml"), investimentoListWrapper);
         saveToFileXML(SOLICITACOES_CRED_FILE.replace(".json", ".xml"), solicitacaoCredListWrapper);
     }
+    
+    public List<Conta> getContas() {
+        return this.contas;
+    }
+    
+    public List<Usuario> getUsuarios() {
+        return this.usuarios;
+    }
 }
