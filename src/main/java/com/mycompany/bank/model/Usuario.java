@@ -2,6 +2,7 @@ package com.mycompany.bank.model;
 
 import com.mycompany.bank.service.SistemaBancario;
 import java.util.List;
+import com.google.gson.annotations.Expose;
 
 /**
  * Classe abstrata para representar um usuário do sistema bancário.
@@ -10,10 +11,15 @@ public abstract class Usuario implements Autenticavel {
 
     private static int contadorId = 0;
 
+    @Expose
     private int id;
+    @Expose
     private String nome;
+    @Expose
     private String cpf;
+    @Expose
     private String senha;
+    
     protected SistemaBancario sistema;
 
     public Usuario(String nome, String cpf, String senha, SistemaBancario sistema) {
@@ -66,5 +72,9 @@ public abstract class Usuario implements Autenticavel {
     @Override
     public String toString() {
         return this.nome;
+    }
+    
+    public void setSistema(SistemaBancario sistema) {
+        this.sistema = sistema;
     }
 }

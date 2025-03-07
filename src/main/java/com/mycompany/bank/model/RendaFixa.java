@@ -1,12 +1,19 @@
 package com.mycompany.bank.model;
+import com.google.gson.annotations.Expose;
 
 /**
  * Investimento do tipo Renda Fixa.
  */
 public class RendaFixa extends Investimento {
 
+    @Expose
+    private final String tipo = "Renda Fixa";
+
+    @Expose
     private double taxaRendimento;
+    @Expose
     private int prazoMinimo;
+    @Expose
     private int prazoMaximo;
 
     public RendaFixa(String nome, String descricao, double valorMinimo,

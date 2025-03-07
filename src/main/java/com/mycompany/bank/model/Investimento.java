@@ -1,9 +1,14 @@
 package com.mycompany.bank.model;
 
+import com.google.gson.annotations.Expose;
+
 public abstract class Investimento {
 
+    @Expose
     private String nome;
+    @Expose
     private String descricao;
+    @Expose
     private double valorMinimo;
 
     public Investimento(String nome, String descricao, double valorMinimo) {

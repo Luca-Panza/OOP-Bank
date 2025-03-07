@@ -1,8 +1,14 @@
 package com.mycompany.bank.model;
+import com.google.gson.annotations.Expose;
 
 public class RendaVariavel extends Investimento {
 
+    @Expose
+    private final String tipo = "Renda Variavel";
+
+    @Expose
     private double percentualRisco;
+    @Expose
     private double rentabilidadeEsperada;
 
     public RendaVariavel(String nome, String descricao, double valorMinimo,

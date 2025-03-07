@@ -2,11 +2,14 @@ package com.mycompany.bank.model;
 
 import com.mycompany.bank.service.SistemaBancario;
 import java.util.List;
+import com.google.gson.annotations.Expose;
 
 /**
  * Representa o Gerente do banco.
  */
 public class Gerente extends Usuario {
+    @Expose
+    private static final String TIPO = "Caixa";
 
     public Gerente(String nome, String cpf, String senha, SistemaBancario sistema) {
         super(nome, cpf, senha, sistema);

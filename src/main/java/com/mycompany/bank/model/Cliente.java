@@ -3,6 +3,7 @@ package com.mycompany.bank.model;
 import com.mycompany.bank.exceptions.SaldoInsuficienteException;
 import com.mycompany.bank.service.SistemaBancario;
 import com.mycompany.bank.model.Conta;
+import com.google.gson.annotations.Expose;
 
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -11,6 +12,9 @@ import javax.swing.JOptionPane;
  * Representa o Cliente do banco.
  */
 public class Cliente extends Usuario {
+    @Expose
+    private static final String TIPO = "Cliente";
+
     public Cliente(String nome, String cpf, String senha, SistemaBancario sistema) {
         super(nome, cpf, senha, sistema);
     }

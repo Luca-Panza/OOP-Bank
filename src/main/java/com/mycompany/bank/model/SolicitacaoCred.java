@@ -1,14 +1,22 @@
 package com.mycompany.bank.model;
+import com.google.gson.annotations.Expose;
 
 
 public class SolicitacaoCred {
+    @Expose
     private String reason;
+    @Expose
     private final int userId;
+    @Expose
     private final double value;
+    @Expose
     private boolean analyzed = false;
+    @Expose
     private boolean approved = false;
+    @Expose
     private boolean accepted = false;
     private static int contadorId = 0;
+    @Expose
     private int id;
 
     public SolicitacaoCred(int userId, double value, String reason) {

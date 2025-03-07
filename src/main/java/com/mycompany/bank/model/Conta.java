@@ -4,15 +4,21 @@ import com.mycompany.bank.exceptions.SaldoInsuficienteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 
 /**
  * Representa uma conta bancária genérica.
  */
 public class Conta {
 
+    @Expose
     private String numero;
+    @Expose
     private double saldo;
+    @Expose
     private int idUsuario;
+    @Expose
     private List<Double> historico = new ArrayList<>();
 
     public Conta(String numero, double saldoInicial, int idUsuario) {
