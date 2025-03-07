@@ -4,6 +4,7 @@ import com.mycompany.bank.model.Usuario;
 import com.mycompany.bank.model.Cliente;
 import com.mycompany.bank.model.Conta;
 import com.mycompany.bank.model.Investimento;
+import com.mycompany.bank.model.SolicitacaoCred;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,13 @@ public class SistemaBancario {
     private List<Usuario> usuarios;
     private List<Conta> contas;
     private List<Investimento> investimentos;
+    private List<SolicitacaoCred> solicitacoesCred;
 
     public SistemaBancario() {
         this.usuarios = new ArrayList<>();
         this.contas = new ArrayList<>();
         this.investimentos = new ArrayList<>();
+        this.solicitacoesCred = new ArrayList<>();
     }
 
     public void adicionarUsuario(Usuario u) {
@@ -99,6 +102,45 @@ public class SistemaBancario {
         }
         
         return null;
+    }
+    
+    public List<SolicitacaoCred> getSolitacoesCred() {
+        return this.solicitacoesCred;
+    }
+    
+    public void adicionarSolicitacaoCred(int userId, double value, String reason) {
+        this.solicitacoesCred.add(new SolicitacaoCred(userId, value, reason));
+    }
+    
+    public List<SolicitacaoCred> getNotApprovedCred() {
+        List<SolicitacaoCred> notApproved = new ArrayList<>();
+        
+        for (SolicitacaoCred solicitacao : solicitacoesCred) {
+            if (!solicitacao.isApproved()) {
+                notApproved.add(solicitacao);
+            }
+        }
+        
+        return notApproved;
+    }
+    
+    public void aceitaSolicitacao(int id) {
+        for (SolicitacaoCred solicitacao : solicitacoesCred) {
+            if (solicitacao.getId() == id) {
+                solicitacao.setanAlyzed();
+                solicitacao.setApproved();
+                break;
+            }
+        }
+    }
+    
+    public void recusarSolicitacao(int id) {
+        for (SolicitacaoCred solicitacao : solicitacoesCred) {
+            if (solicitacao.getId() == id) {
+                solicitacao.setanAlyzed();
+                break;
+            }
+        }
     }
 
     // Exemplos de métodos de persistência (incompletos):

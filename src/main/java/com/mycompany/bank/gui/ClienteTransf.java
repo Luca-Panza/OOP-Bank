@@ -39,7 +39,6 @@ public class ClienteTransf extends JFrame {
                 String text = valueField.getText();
 
                 if (!Character.isDigit(c) && c != '.' || (c == '.' && text.contains("."))) {
-                    System.out.print(c + text);
                     evt.consume();
                 }
             }

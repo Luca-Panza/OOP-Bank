@@ -1,38 +1,53 @@
 package com.mycompany.bank.model;
 
 import com.mycompany.bank.service.SistemaBancario;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Representa o Gerente do banco.
- * Pode ter responsabilidades de cadastrar investimentos, avaliar crédito etc.
  */
 public class Gerente extends Usuario {
 
-    private List<Investimento> opcoesInvestimento;
-
     public Gerente(String nome, String cpf, String senha, SistemaBancario sistema) {
         super(nome, cpf, senha, sistema);
-        this.opcoesInvestimento = new ArrayList<>();
-    }
-
-    public List<Investimento> getOpcoesInvestimento() {
-        return opcoesInvestimento;
     }
 
     public void adicionarInvestimento(Investimento inv) {
-        this.opcoesInvestimento.add(inv);
         System.out.println("Investimento cadastrado: " + inv.getNome());
     }
 
-    public void removerInvestimento(String nome) {
-        this.opcoesInvestimento.removeIf(inv -> inv.getNome().equalsIgnoreCase(nome));
-        System.out.println("Investimento removido: " + nome);
+    public Cliente getClienteByAccount(String conta) {
+        return sistema.getClienteByAccount(conta);
     }
 
-    public boolean avaliarCredito(Cliente cliente, double valorSolicitado) {
-        // Exemplo de lógica fictícia
-        return valorSolicitado < 100000;
+    public void cadastrarRendaFixa(String nome, String descricao, double valorMinimo, double taxaRendimento, int prazoMinimo, int prazoMaximo) {
+        sistema.adicionarInvestimento(new RendaFixa(nome, descricao, valorMinimo, taxaRendimento, prazoMinimo, prazoMaximo));
+    }
+
+    public void cadastrarRendaVariavel(String nome, String descricao, double valorMinimo,
+            double percentualRisco, double rentabilidadeEsperada) {
+        sistema.adicionarInvestimento(new RendaVariavel(nome, descricao, valorMinimo, percentualRisco, rentabilidadeEsperada));
+    }
+    
+    public List<SolicitacaoCred> getNotApproved() {
+        return sistema.getNotApprovedCred();
+    }
+    
+    public String getClientNameById(int id) {
+        Usuario usuarioEncontrado = sistema.buscarUsuarioPorId(id);
+        
+        if (usuarioEncontrado != null) {
+            return usuarioEncontrado.getNome();
+        }
+        
+        return "Usuario não encontrado";
+    }
+    
+    public void aceitarSolicitacao(int id) {
+        sistema.aceitaSolicitacao(id);
+    }
+    
+    public void recusarSolicitacao(int id) {
+        sistema.recusarSolicitacao(id);
     }
 }

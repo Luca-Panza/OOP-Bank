@@ -11,21 +11,21 @@ public class ContaTest {
 
     @Test
     public void testDeposito() {
-        Conta conta = new Conta("0001", 1000.0);
+        Conta conta = new Conta("0001", 1000.0, 1);
         conta.depositar(500.0);
         Assert.assertEquals(1500.0, conta.getSaldo(), 0.001);
     }
 
     @Test
     public void testSaque() throws SaldoInsuficienteException {
-        Conta conta = new Conta("0001", 1000.0);
+        Conta conta = new Conta("0001", 1000.0, 1);
         conta.sacar(200.0);
         Assert.assertEquals(800.0, conta.getSaldo(), 0.001);
     }
 
     @Test(expected = SaldoInsuficienteException.class)
     public void testSaqueSaldoInsuficiente() throws SaldoInsuficienteException {
-        Conta conta = new Conta("0001", 100.0);
+        Conta conta = new Conta("0001", 100.0, 1);
         conta.sacar(200.0);  // deve lançar SaldoInsuficienteException
     }
 }

@@ -17,6 +17,8 @@ public class MainView extends JFrame {
 
     public MainView(SistemaBancario sistema) {
         super("Sistema Bancário - Login");
+        
+        MainView instancia = this;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
@@ -42,7 +44,7 @@ public class MainView extends JFrame {
                     JOptionPane.showMessageDialog(null, "Bem-vindo, " + user.getNome());
                     setVisible(false);
                     
-                    ActionsView actionsView = new ActionsView(sistema, user);
+                    ActionsView actionsView = new ActionsView(sistema, user, instancia);
                     actionsView.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "CPF ou senha inválidos.");

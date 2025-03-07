@@ -22,17 +22,13 @@ public class RendaFixa extends Investimento {
         if (valor < getValorMinimo()) {
             throw new IllegalArgumentException("Valor abaixo do mínimo para este investimento!");
         }
-        System.out.println("Aplicando R$ " + valor + " em " + getNome() + " (RendaFixa).");
-        // Lógica fictícia adicional...
     }
 
     @Override
     public void resgatar(double valor) {
         System.out.println("Resgatando R$ " + valor + " de " + getNome() + " (RendaFixa).");
-        // Lógica fictícia adicional...
     }
 
-    // Getters / Setters
     public double getTaxaRendimento() {
         return taxaRendimento;
     }
