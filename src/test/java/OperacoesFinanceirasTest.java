@@ -3,9 +3,9 @@ import com.mycompany.bank.model.Cliente;
 import com.mycompany.bank.service.SistemaBancario;
 import com.mycompany.bank.exceptions.SaldoInsuficienteException;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Testes para operações financeiras básicas (saque, depósito e transferência)
@@ -18,7 +18,7 @@ public class OperacoesFinanceirasTest {
     private Conta conta1;
     private Conta conta2;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         sistema = new SistemaBancario();
         
@@ -43,40 +43,46 @@ public class OperacoesFinanceirasTest {
     public void testDepositoValido() {
         // Testa um depósito válido
         conta1.depositar(500.0);
-        Assert.assertEquals(1500.0, conta1.getSaldo(), 0.001);
+        Assertions.assertEquals(1500.0, conta1.getSaldo(), 0.001);
         
         // Verifica se o histórico foi atualizado
-        Assert.assertEquals(1, conta1.getHistorico().size());
-        Assert.assertEquals(500.0, conta1.getHistorico().get(0), 0.001);
+        Assertions.assertEquals(1, conta1.getHistorico().size());
+        Assertions.assertEquals(500.0, conta1.getHistorico().get(0), 0.001);
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testDepositoInvalido() {
         // Tenta fazer um depósito com valor negativo
-        conta1.depositar(-100.0);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            conta1.depositar(-100.0);
+        });
     }
     
     @Test
     public void testSaqueValido() throws SaldoInsuficienteException {
         // Realiza um saque válido
         conta1.sacar(300.0);
-        Assert.assertEquals(700.0, conta1.getSaldo(), 0.001);
+        Assertions.assertEquals(700.0, conta1.getSaldo(), 0.001);
         
         // Verifica se o histórico foi atualizado
-        Assert.assertEquals(1, conta1.getHistorico().size());
-        Assert.assertEquals(-300.0, conta1.getHistorico().get(0), 0.001);
+        Assertions.assertEquals(1, conta1.getHistorico().size());
+        Assertions.assertEquals(-300.0, conta1.getHistorico().get(0), 0.001);
     }
     
-    @Test(expected = SaldoInsuficienteException.class)
-    public void testSaqueComSaldoInsuficiente() throws SaldoInsuficienteException {
+    @Test
+    public void testSaqueComSaldoInsuficiente() {
         // Tenta sacar mais do que o saldo disponível
-        conta1.sacar(1500.0);
+        Assertions.assertThrows(SaldoInsuficienteException.class, () -> {
+            conta1.sacar(1500.0);
+        });
     }
     
-    @Test(expected = IllegalArgumentException.class)
-    public void testSaqueComValorNegativo() throws SaldoInsuficienteException {
+    @Test
+    public void testSaqueComValorNegativo() {
         // Tenta fazer um saque com valor negativo
-        conta1.sacar(-200.0);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            conta1.sacar(-200.0);
+        });
     }
     
     @Test
@@ -85,35 +91,37 @@ public class OperacoesFinanceirasTest {
         conta1.transferir(conta2, 300.0);
         
         // Verifica os saldos após a transferência
-        Assert.assertEquals(700.0, conta1.getSaldo(), 0.001);
-        Assert.assertEquals(800.0, conta2.getSaldo(), 0.001);
+        Assertions.assertEquals(700.0, conta1.getSaldo(), 0.001);
+        Assertions.assertEquals(800.0, conta2.getSaldo(), 0.001);
         
         // Verifica se o histórico da conta de origem foi atualizado
-        Assert.assertEquals(1, conta1.getHistorico().size());
-        Assert.assertEquals(-300.0, conta1.getHistorico().get(0), 0.001);
+        Assertions.assertEquals(1, conta1.getHistorico().size());
+        Assertions.assertEquals(-300.0, conta1.getHistorico().get(0), 0.001);
         
         // Verifica se o histórico da conta de destino foi atualizado
-        Assert.assertEquals(1, conta2.getHistorico().size());
-        Assert.assertEquals(300.0, conta2.getHistorico().get(0), 0.001);
+        Assertions.assertEquals(1, conta2.getHistorico().size());
+        Assertions.assertEquals(300.0, conta2.getHistorico().get(0), 0.001);
     }
     
-    @Test(expected = SaldoInsuficienteException.class)
-    public void testTransferenciaComSaldoInsuficiente() throws SaldoInsuficienteException {
+    @Test
+    public void testTransferenciaComSaldoInsuficiente() {
         // Tenta transferir mais do que o saldo disponível
-        conta1.transferir(conta2, 1500.0);
+        Assertions.assertThrows(SaldoInsuficienteException.class, () -> {
+            conta1.transferir(conta2, 1500.0);
+        });
     }
     
     @Test
     public void testConsultaSaldo() {
         // Verifica se o saldo inicial está correto
         double saldo = cliente1.consultarSaldo("1001");
-        Assert.assertEquals(1000.0, saldo, 0.001);
+        Assertions.assertEquals(1000.0, saldo, 0.001);
     }
     
     @Test
     public void testPertenceConta() {
         // Verifica se a conta pertence ao cliente
-        Assert.assertTrue(cliente1.pertenceConta("1001"));
-        Assert.assertFalse(cliente1.pertenceConta("2001"));
+        Assertions.assertTrue(cliente1.pertenceConta("1001"));
+        Assertions.assertFalse(cliente1.pertenceConta("2001"));
     }
 } 

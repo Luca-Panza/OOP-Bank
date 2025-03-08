@@ -60,6 +60,7 @@ public class SistemaBancario {
 
     public void adicionarUsuario(Usuario u) {
         this.usuarios.add(u);
+        saveAll(); // Salvar depois de adicionar
     }
 
     public Usuario buscarUsuarioPorCpf(String cpf) {
@@ -83,6 +84,66 @@ public class SistemaBancario {
 
     public void removerUsuario(String cpf) {
         usuarios.removeIf(u -> u.getCpf().equalsIgnoreCase(cpf));
+        saveAll(); // Salvar depois de remover
+    }
+    
+    public void atualizarUsuario(Usuario usuario) {
+        // Encontrar o usuário na lista
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == usuario.getId()) {
+                usuarios.set(i, usuario);
+                break;
+            }
+        }
+        saveAll(); // Salvar depois de atualizar
+    }
+    
+    public List<Usuario> listarUsuariosPorTipo(Class<?> tipo) {
+        List<Usuario> resultado = new ArrayList<>();
+        
+        for (Usuario u : usuarios) {
+            if (tipo.isInstance(u)) {
+                resultado.add(u);
+            }
+        }
+        
+        return resultado;
+    }
+    
+    public List<Cliente> listarClientes() {
+        List<Cliente> clientes = new ArrayList<>();
+        
+        for (Usuario u : usuarios) {
+            if (u instanceof Cliente) {
+                clientes.add((Cliente) u);
+            }
+        }
+        
+        return clientes;
+    }
+    
+    public List<Caixa> listarCaixas() {
+        List<Caixa> caixas = new ArrayList<>();
+        
+        for (Usuario u : usuarios) {
+            if (u instanceof Caixa) {
+                caixas.add((Caixa) u);
+            }
+        }
+        
+        return caixas;
+    }
+    
+    public List<Gerente> listarGerentes() {
+        List<Gerente> gerentes = new ArrayList<>();
+        
+        for (Usuario u : usuarios) {
+            if (u instanceof Gerente) {
+                gerentes.add((Gerente) u);
+            }
+        }
+        
+        return gerentes;
     }
 
     public Usuario login(String cpf, String senha) {

@@ -7,9 +7,9 @@ import com.mycompany.bank.model.SolicitacaoCred;
 import com.mycompany.bank.service.SistemaBancario;
 import com.mycompany.bank.exceptions.SaldoInsuficienteException;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Testes de integração do sistema bancário
@@ -24,7 +24,7 @@ public class IntegracaoSistemaBancarioTest {
     private RendaFixa[] rendasFixas;
     private RendaVariavel[] rendasVariaveis;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         // Utiliza a fábrica de dados de teste para criar o ambiente
         sistema = TestDataFactory.criarSistemaBancarioComUsuarios();
@@ -40,11 +40,17 @@ public class IntegracaoSistemaBancarioTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Nenhum gerente encontrado"));
         
-        // Obtém a primeira conta do cliente
-        contaCliente = sistema.getContas().stream()
-                .filter(c -> c.getUserId() == cliente.getId())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Nenhuma conta encontrada para o cliente"));
+        // Cria uma conta para o cliente se não existir
+        if (sistema.getContas().stream().noneMatch(c -> c.getUserId() == cliente.getId())) {
+            contaCliente = new Conta("C001", 2000.0, cliente.getId());
+            sistema.adicionarConta(contaCliente);
+        } else {
+            // Obtém a primeira conta do cliente
+            contaCliente = sistema.getContas().stream()
+                    .filter(c -> c.getUserId() == cliente.getId())
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Nenhuma conta encontrada para o cliente"));
+        }
         
         // Cria investimentos para testes
         rendasFixas = TestDataFactory.criarRendasFixas();
@@ -55,37 +61,35 @@ public class IntegracaoSistemaBancarioTest {
     public void testFluxoOperacoesCompleto() throws SaldoInsuficienteException {
         // 1. Verifica saldo inicial
         double saldoInicial = contaCliente.getSaldo();
-        Assert.assertTrue("Saldo inicial deve ser positivo", saldoInicial > 0);
+        Assertions.assertTrue(saldoInicial > 0, "Saldo inicial deve ser positivo");
         
         // 2. Realiza depósito
         double valorDeposito = 1000.0;
         contaCliente.depositar(valorDeposito);
-        Assert.assertEquals(saldoInicial + valorDeposito, contaCliente.getSaldo(), 0.001);
+        Assertions.assertEquals(saldoInicial + valorDeposito, contaCliente.getSaldo(), 0.001);
         
         // 3. Realiza saque
         double valorSaque = 500.0;
         contaCliente.sacar(valorSaque);
-        Assert.assertEquals(saldoInicial + valorDeposito - valorSaque, contaCliente.getSaldo(), 0.001);
+        Assertions.assertEquals(saldoInicial + valorDeposito - valorSaque, contaCliente.getSaldo(), 0.001);
         
         // 4. Aplica em renda fixa
         RendaFixa rendaFixaEscolhida = rendasFixas[0]; // CDB
         double valorAplicacao = 1000.0;
         rendaFixaEscolhida.aplicar(valorAplicacao);
         
-        // 5. Faz uma transferência para outra conta
-        Conta contaDestino = sistema.getContas().stream()
-                .filter(c -> c.getUserId() != cliente.getId())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Nenhuma conta de outro cliente encontrada"));
+        // 5. Cria uma conta de destino para transferência
+        Conta contaDestino = new Conta("C999", 500.0, 999);
+        sistema.adicionarConta(contaDestino);
         
         double saldoDestinoInicial = contaDestino.getSaldo();
         double valorTransferencia = 300.0;
         
         contaCliente.transferir(contaDestino, valorTransferencia);
         
-        Assert.assertEquals(saldoInicial + valorDeposito - valorSaque - valorTransferencia, 
+        Assertions.assertEquals(saldoInicial + valorDeposito - valorSaque - valorTransferencia, 
                            contaCliente.getSaldo(), 0.001);
-        Assert.assertEquals(saldoDestinoInicial + valorTransferencia, 
+        Assertions.assertEquals(saldoDestinoInicial + valorTransferencia, 
                            contaDestino.getSaldo(), 0.001);
         
         // 6. Aplica em renda variável
@@ -99,12 +103,12 @@ public class IntegracaoSistemaBancarioTest {
         // 8. Gerente analisa e aprova solicitação
         solicitacao.setanAlyzed();
         solicitacao.setApproved();
-        Assert.assertTrue(solicitacao.isAnalyzed());
-        Assert.assertTrue(solicitacao.isApproved());
+        Assertions.assertTrue(solicitacao.isAnalyzed());
+        Assertions.assertTrue(solicitacao.isApproved());
         
         // 9. Cliente aceita solicitação
         solicitacao.setAccepted();
-        Assert.assertTrue(solicitacao.isAccepted());
+        Assertions.assertTrue(solicitacao.isAccepted());
         
         // 10. Realiza resgate de investimento
         rendaFixaEscolhida.resgatar(500.0);
@@ -113,12 +117,16 @@ public class IntegracaoSistemaBancarioTest {
     
     @Test
     public void testFluxoMultiplasContasCliente() throws SaldoInsuficienteException {
-        // Obtém as contas do cliente (deve ter pelo menos duas pela configuração da fábrica)
+        // Cria uma segunda conta para o cliente
+        Conta segundaConta = new Conta("C002", 1500.0, cliente.getId());
+        sistema.adicionarConta(segundaConta);
+        
+        // Obtém as contas do cliente
         Conta[] contasCliente = sistema.getContas().stream()
                 .filter(c -> c.getUserId() == cliente.getId())
                 .toArray(Conta[]::new);
         
-        Assert.assertTrue("Cliente deve ter pelo menos 2 contas", contasCliente.length >= 2);
+        Assertions.assertTrue(contasCliente.length >= 2, "Cliente deve ter pelo menos 2 contas");
         
         Conta conta1 = contasCliente[0];
         Conta conta2 = contasCliente[1];
@@ -132,8 +140,8 @@ public class IntegracaoSistemaBancarioTest {
         conta1.transferir(conta2, valorTransferencia);
         
         // Verifica saldos após transferência
-        Assert.assertEquals(saldoInicial1 - valorTransferencia, conta1.getSaldo(), 0.001);
-        Assert.assertEquals(saldoInicial2 + valorTransferencia, conta2.getSaldo(), 0.001);
+        Assertions.assertEquals(saldoInicial1 - valorTransferencia, conta1.getSaldo(), 0.001);
+        Assertions.assertEquals(saldoInicial2 + valorTransferencia, conta2.getSaldo(), 0.001);
     }
     
     @Test

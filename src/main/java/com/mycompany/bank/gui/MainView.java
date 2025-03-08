@@ -14,6 +14,7 @@ public class MainView extends JFrame {
     private JTextField cpfField;
     private JPasswordField senhaField;
     private JButton loginButton;
+    private JButton userManagerButton;
 
     public MainView(SistemaBancario sistema) {
         super("Sistema Bancário - Login");
@@ -21,7 +22,7 @@ public class MainView extends JFrame {
         MainView instancia = this;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 150);
+        setSize(300, 200);
         setLayout(new FlowLayout());
 
         add(new JLabel("CPF:"));
@@ -53,6 +54,17 @@ public class MainView extends JFrame {
         });
         
         add(loginButton);
+        
+        userManagerButton = new JButton("Gerenciar Usuários");
+        userManagerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UsuariosManager usuariosManager = new UsuariosManager(sistema);
+                usuariosManager.setVisible(true);
+            }
+        });
+        
+        add(userManagerButton);
 
         setLocationRelativeTo(null);
     }

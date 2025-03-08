@@ -3,12 +3,13 @@ import com.mycompany.bank.model.Gerente;
 import com.mycompany.bank.model.SolicitacaoCred;
 import com.mycompany.bank.service.SistemaBancario;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Testes de integração para o fluxo completo de solicitações de crédito
@@ -22,7 +23,7 @@ public class SolicitacaoCreditoIntegracaoTest {
     private List<SolicitacaoCred> solicitacoesCliente1;
     private List<SolicitacaoCred> solicitacoesCliente2;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         // Inicializa sistema
         sistema = TestDataFactory.criarSistemaBancarioComUsuarios();
@@ -32,7 +33,7 @@ public class SolicitacaoCreditoIntegracaoTest {
                 .filter(u -> u instanceof Cliente)
                 .map(u -> (Cliente) u)
                 .limit(2)
-                .toList();
+                .collect(Collectors.toList());
         
         cliente1 = clientes.get(0);
         cliente2 = clientes.get(1);
@@ -62,21 +63,21 @@ public class SolicitacaoCreditoIntegracaoTest {
         SolicitacaoCred solicitacao = solicitacoesCliente1.get(0);
         
         // Verifica estado inicial
-        Assert.assertFalse(solicitacao.isAnalyzed());
-        Assert.assertFalse(solicitacao.isApproved());
-        Assert.assertFalse(solicitacao.isAccepted());
+        Assertions.assertFalse(solicitacao.isAnalyzed());
+        Assertions.assertFalse(solicitacao.isApproved());
+        Assertions.assertFalse(solicitacao.isAccepted());
         
         // Gerente analisa e aprova
         solicitacao.setanAlyzed();
-        Assert.assertTrue(solicitacao.isAnalyzed());
-        Assert.assertFalse(solicitacao.isApproved()); // Ainda não aprovada
+        Assertions.assertTrue(solicitacao.isAnalyzed());
+        Assertions.assertFalse(solicitacao.isApproved()); // Ainda não aprovada
         
         solicitacao.setApproved();
-        Assert.assertTrue(solicitacao.isApproved());
+        Assertions.assertTrue(solicitacao.isApproved());
         
         // Cliente aceita
         solicitacao.setAccepted();
-        Assert.assertTrue(solicitacao.isAccepted());
+        Assertions.assertTrue(solicitacao.isAccepted());
     }
     
     @Test
@@ -84,14 +85,14 @@ public class SolicitacaoCreditoIntegracaoTest {
         // O gerente analisa todas as solicitações do cliente 1
         for (SolicitacaoCred solicitacao : solicitacoesCliente1) {
             solicitacao.setanAlyzed();
-            Assert.assertTrue(solicitacao.isAnalyzed());
+            Assertions.assertTrue(solicitacao.isAnalyzed());
             
             // Aprova apenas solicitações abaixo de 10000
             if (solicitacao.getValue() <= 10000.0) {
                 solicitacao.setApproved();
-                Assert.assertTrue(solicitacao.isApproved());
+                Assertions.assertTrue(solicitacao.isApproved());
             } else {
-                Assert.assertFalse(solicitacao.isApproved());
+                Assertions.assertFalse(solicitacao.isApproved());
             }
         }
         
@@ -101,8 +102,8 @@ public class SolicitacaoCreditoIntegracaoTest {
                 .count();
         
         // Deve ter pelo menos uma aprovada e uma não aprovada (pela configuração dos dados de teste)
-        Assert.assertTrue(aprovadas > 0);
-        Assert.assertTrue(aprovadas < solicitacoesCliente1.size());
+        Assertions.assertTrue(aprovadas > 0);
+        Assertions.assertTrue(aprovadas < solicitacoesCliente1.size());
     }
     
     @Test
@@ -111,17 +112,17 @@ public class SolicitacaoCreditoIntegracaoTest {
         for (SolicitacaoCred solicitacao : solicitacoesCliente2) {
             solicitacao.setanAlyzed();
             solicitacao.setApproved();
-            Assert.assertTrue(solicitacao.isAnalyzed());
-            Assert.assertTrue(solicitacao.isApproved());
+            Assertions.assertTrue(solicitacao.isAnalyzed());
+            Assertions.assertTrue(solicitacao.isApproved());
         }
         
         // Cliente aceita apenas as solicitações abaixo de 6000
         for (SolicitacaoCred solicitacao : solicitacoesCliente2) {
             if (solicitacao.getValue() < 6000.0) {
                 solicitacao.setAccepted();
-                Assert.assertTrue(solicitacao.isAccepted());
+                Assertions.assertTrue(solicitacao.isAccepted());
             } else {
-                Assert.assertFalse(solicitacao.isAccepted());
+                Assertions.assertFalse(solicitacao.isAccepted());
             }
         }
         
@@ -131,29 +132,29 @@ public class SolicitacaoCreditoIntegracaoTest {
                 .count();
         
         // Deve ter pelo menos uma aceita e uma não aceita (pela configuração dos dados de teste)
-        Assert.assertTrue(aceitas > 0);
-        Assert.assertTrue(aceitas < solicitacoesCliente2.size());
+        Assertions.assertTrue(aceitas > 0);
+        Assertions.assertTrue(aceitas < solicitacoesCliente2.size());
     }
     
     @Test
     public void testVerificacaoPropriedadesSolicitacao() {
         // Testa as propriedades de cada solicitação
         for (SolicitacaoCred solicitacao : solicitacoesCliente1) {
-            Assert.assertEquals(cliente1.getId(), solicitacao.getUserId());
-            Assert.assertTrue(solicitacao.getValue() > 0);
-            Assert.assertNotNull(solicitacao.getReason());
-            Assert.assertFalse(solicitacao.getReason().isEmpty());
+            Assertions.assertEquals(cliente1.getId(), solicitacao.getUserId());
+            Assertions.assertTrue(solicitacao.getValue() > 0);
+            Assertions.assertNotNull(solicitacao.getReason());
+            Assertions.assertFalse(solicitacao.getReason().isEmpty());
         }
         
         // Verifica se todas as solicitações têm IDs diferentes
         List<Integer> ids = new ArrayList<>();
         for (SolicitacaoCred solicitacao : solicitacoesCliente1) {
-            Assert.assertFalse(ids.contains(solicitacao.getId()));
+            Assertions.assertFalse(ids.contains(solicitacao.getId()));
             ids.add(solicitacao.getId());
         }
         
         for (SolicitacaoCred solicitacao : solicitacoesCliente2) {
-            Assert.assertFalse(ids.contains(solicitacao.getId()));
+            Assertions.assertFalse(ids.contains(solicitacao.getId()));
             ids.add(solicitacao.getId());
         }
     }

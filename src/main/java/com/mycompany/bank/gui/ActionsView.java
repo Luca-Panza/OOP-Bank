@@ -100,7 +100,7 @@ public class ActionsView extends JFrame {
             add(btnTransf);
 
         } else if (usuario instanceof Gerente) {
-            setSize(300, 230);
+            setSize(300, 270);
 
             JButton btnAnaliseCredito = new JButton("Apoio Movimentações Financeiras");
             btnAnaliseCredito.addActionListener(new ActionListener() {
@@ -142,10 +142,22 @@ public class ActionsView extends JFrame {
                 }
             });
 
+            JButton btnGerarRelatorio = new JButton("Relatórios Financeiros");
+            
+            JButton btnGerenciarUsuarios = new JButton("Gerenciar Usuários");
+            btnGerenciarUsuarios.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    UsuariosManager usuariosManager = new UsuariosManager(sistema);
+                    usuariosManager.setVisible(true);
+                }
+            });
+
             add(btnAnaliseCredito);
             add(btnRendaFixa);
             add(btnRendaVariavel);
             add(btnAvCred);
+            add(btnGerenciarUsuarios);
         }
         
         JButton btnSair = new JButton("Sair");
