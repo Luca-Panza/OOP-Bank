@@ -65,4 +65,9 @@ public class SolicitacaoCred {
    public String getReason() {
        return this.reason;
    }
+   
+   @Override()
+   public String toString() {
+       return this.reason;
+   }
 }

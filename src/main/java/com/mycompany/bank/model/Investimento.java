@@ -3,6 +3,9 @@ package com.mycompany.bank.model;
 import com.google.gson.annotations.Expose;
 
 public abstract class Investimento {
+    
+    @Expose
+    private int id;
 
     @Expose
     private String nome;
@@ -10,11 +13,18 @@ public abstract class Investimento {
     private String descricao;
     @Expose
     private double valorMinimo;
+    
+    @Expose
+    protected double value;
+    
+    @Expose
+    private static int contadorId = 0;
 
     public Investimento(String nome, String descricao, double valorMinimo) {
         this.nome = nome;
         this.descricao = descricao;
         this.valorMinimo = valorMinimo;
+        this.id = ++contadorId;
     }
 
     public String getNome() {
@@ -32,4 +42,12 @@ public abstract class Investimento {
     public abstract void aplicar(double valor);
 
     public abstract void resgatar(double valor);
+    
+    public int getId() {
+        return id;
+    }
+    
+    public double getValue() {
+        return value;
+    }
 }

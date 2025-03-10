@@ -1,6 +1,5 @@
 package com.mycompany.bank.gui;
 
-import com.mycompany.bank.exceptions.SaldoInsuficienteException;
 import com.mycompany.bank.model.Cliente;
 import com.mycompany.bank.model.Conta;
 

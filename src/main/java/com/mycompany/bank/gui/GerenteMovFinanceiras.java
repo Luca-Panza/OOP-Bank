@@ -46,6 +46,16 @@ public class GerenteMovFinanceiras extends JFrame {
         
         add(tranferenciaButton);
         
+        JButton btnSair = new JButton("Voltar");
+        btnSair.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                parent.setVisible(true);
+            }
+        });
+        add(btnSair);
+        
         setLocationRelativeTo(null);
     }
 }

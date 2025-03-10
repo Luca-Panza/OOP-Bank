@@ -18,7 +18,7 @@ public class GerenteRendaVariavel extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(350, 220);
-        setLayout(new GridLayout(5, 2, 5, 5));
+        setLayout(new GridLayout(6, 2, 5, 5));
 
         add(new JLabel("Nome:"));
         nomeField = new JTextField();
@@ -86,6 +86,16 @@ public class GerenteRendaVariavel extends JFrame {
                 }
             }
         });
+        
+        JButton btnSair = new JButton("Voltar");
+        btnSair.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                parent.setVisible(true);
+            }
+        });
+        add(btnSair);
         
         setLocationRelativeTo(null);
     }

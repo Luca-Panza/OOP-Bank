@@ -48,8 +48,43 @@ public class ActionsView extends JFrame {
             });
 
             JButton btnRendaFixa = new JButton("Investimento Renda Fixa");
+            
+            btnRendaFixa.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ClienteInvestimentosRendaFixa clienteInvestimentosRendaFixa = new ClienteInvestimentosRendaFixa(instancia, (Cliente) usuario);
+
+                    clienteInvestimentosRendaFixa.setVisible(true);
+                    instancia.setVisible(false);
+                }
+            });
+            
             JButton btnRendaVariavel = new JButton("Investimento Renda Variável");
+            
+            btnRendaVariavel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ClienteInvestimentosRendaVariavel clienteInvestimentosRendaVariavel = new ClienteInvestimentosRendaVariavel(instancia, (Cliente) usuario);
+
+                    clienteInvestimentosRendaVariavel.setVisible(true);
+                    instancia.setVisible(false);
+                }
+            });
+            
             JButton btnSolicitacaoCredito = new JButton("Solicitação de Crédito");
+            
+            btnSolicitacaoCredito.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    
+                    System.out.println("entrou");
+                    
+                    ClienteSolicitacaoCredito clienteSolicitacaoCredito = new ClienteSolicitacaoCredito(instancia, (Cliente) usuario);
+
+                    clienteSolicitacaoCredito.setVisible(true);
+                    instancia.setVisible(false);
+                }
+            });
 
             add(btnTransferencia);
             add(btnSaldoExtrato);

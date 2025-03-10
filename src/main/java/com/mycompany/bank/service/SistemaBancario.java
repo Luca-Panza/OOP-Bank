@@ -52,7 +52,7 @@ public class SistemaBancario {
         }.getType());
         this.solicitacoesCred = loadFromFile(SOLICITACOES_CRED_FILE, new TypeToken<List<SolicitacaoCred>>() {
         }.getType());
-        
+
         for (Usuario u : usuarios) {
             u.setSistema(this);
         }
@@ -86,7 +86,7 @@ public class SistemaBancario {
         usuarios.removeIf(u -> u.getCpf().equalsIgnoreCase(cpf));
         saveAll(); // Salvar depois de remover
     }
-    
+
     public void atualizarUsuario(Usuario usuario) {
         // Encontrar o usuário na lista
         for (int i = 0; i < usuarios.size(); i++) {
@@ -97,52 +97,52 @@ public class SistemaBancario {
         }
         saveAll(); // Salvar depois de atualizar
     }
-    
+
     public List<Usuario> listarUsuariosPorTipo(Class<?> tipo) {
         List<Usuario> resultado = new ArrayList<>();
-        
+
         for (Usuario u : usuarios) {
             if (tipo.isInstance(u)) {
                 resultado.add(u);
             }
         }
-        
+
         return resultado;
     }
-    
+
     public List<Cliente> listarClientes() {
         List<Cliente> clientes = new ArrayList<>();
-        
+
         for (Usuario u : usuarios) {
             if (u instanceof Cliente) {
                 clientes.add((Cliente) u);
             }
         }
-        
+
         return clientes;
     }
-    
+
     public List<Caixa> listarCaixas() {
         List<Caixa> caixas = new ArrayList<>();
-        
+
         for (Usuario u : usuarios) {
             if (u instanceof Caixa) {
                 caixas.add((Caixa) u);
             }
         }
-        
+
         return caixas;
     }
-    
+
     public List<Gerente> listarGerentes() {
         List<Gerente> gerentes = new ArrayList<>();
-        
+
         for (Usuario u : usuarios) {
             if (u instanceof Gerente) {
                 gerentes.add((Gerente) u);
             }
         }
-        
+
         return gerentes;
     }
 
@@ -188,6 +188,36 @@ public class SistemaBancario {
         return investimentos;
     }
 
+    public List<Investimento> getInvestimentosRendaFixa() {
+        List<Investimento> rendaFixaInvestments = new ArrayList<>();
+        for (Investimento investimento : investimentos) {
+            if (investimento instanceof RendaFixa) {
+                rendaFixaInvestments.add(investimento);
+            }
+        }
+        return rendaFixaInvestments;
+    }
+
+    public List<Investimento> getInvestimentosRendaVariavel() {
+        List<Investimento> rendaVariavelInvestments = new ArrayList<>();
+        for (Investimento investimento : investimentos) {
+            if (investimento instanceof RendaVariavel) {
+                rendaVariavelInvestments.add(investimento);
+            }
+        }
+        return rendaVariavelInvestments;
+    }
+
+    public List<Investimento> getInvestimentosByIds(List<Integer> ids) {
+        List<Investimento> filteredInvestments = new ArrayList<>();
+        for (Investimento investimento : investimentos) {
+            if (ids.contains(investimento.getId())) {
+                filteredInvestments.add(investimento);
+            }
+        }
+        return filteredInvestments;
+    }
+
     public Cliente getClienteByAccount(String conta) {
         Conta contaEncontrada = buscarContaPorNumero(conta);
 
@@ -210,7 +240,8 @@ public class SistemaBancario {
         List<SolicitacaoCred> notApproved = new ArrayList<>();
 
         for (SolicitacaoCred solicitacao : solicitacoesCred) {
-            if (!solicitacao.isApproved()) {
+            System.out.println(solicitacao.isAnalyzed());
+            if (!solicitacao.isAnalyzed()) {
                 notApproved.add(solicitacao);
             }
         }
@@ -293,12 +324,24 @@ public class SistemaBancario {
         saveToFileXML(INVESTIMENTOS_FILE.replace(".json", ".xml"), investimentoListWrapper);
         saveToFileXML(SOLICITACOES_CRED_FILE.replace(".json", ".xml"), solicitacaoCredListWrapper);
     }
-    
+
     public List<Conta> getContas() {
         return this.contas;
     }
-    
+
     public List<Usuario> getUsuarios() {
         return this.usuarios;
+    }
+
+    public List<SolicitacaoCred> getSolicitacoesCredito(int idUser) {
+        List<SolicitacaoCred> solicitacoes = new ArrayList<>();
+
+        for (SolicitacaoCred s : solicitacoesCred) {
+            if (s.getUserId() == idUser) {
+                solicitacoes.add(s);
+            }
+        }
+
+        return solicitacoes;
     }
 }

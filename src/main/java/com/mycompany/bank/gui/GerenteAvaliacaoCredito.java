@@ -58,6 +58,16 @@ public class GerenteAvaliacaoCredito extends JFrame {
             panel.add(itemPanel);
         }
         
+        JButton btnSair = new JButton("Voltar");
+        btnSair.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                parent.setVisible(true);
+            }
+        });
+        panel.add(btnSair);
+        
         JScrollPane scrollPane = new JScrollPane(panel);
         add(scrollPane, BorderLayout.CENTER);
         

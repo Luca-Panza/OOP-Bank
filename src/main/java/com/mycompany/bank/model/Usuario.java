@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
  * Classe abstrata para representar um usuário do sistema bancário.
  */
 public abstract class Usuario implements Autenticavel {
-
+    @Expose
     private static int contadorId = 0;
 
     @Expose
